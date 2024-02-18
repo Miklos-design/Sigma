@@ -1,0 +1,98 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2758
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww24260\viewh16380\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Miki \
+\
+\
+\
+;This programm counts the sum of all negative numbers in the array X and stores it into vaariable negsum as well as\
+;the number of elements that are non-negative (>=0) and stores this count in the variable pzcount;\
+;In the next step it counts the number of positive elements of X (> 0) that are odd numbers and \
+;stores this count in the variable oddcount.  \
+;It also detects negsum for overflow setting boolean to true if overflow has happened  \
+\
+\
+;final value of negsum should be -6 + -20 + -21+-10 = -57 ($FFC7),\
+;final value of pzcount is 8\
+;final value of oddcount also 4.\
+\
+;HLL Algorythm\
+\
+;int negsum\
+;int pzcount\
+;int oddcount\
+;int arr[n]X\
+;boolean overflow\
+;while(int i=0;i<n;i++)\{\
+;	if(X[n]<0)\{\
+;	negsum+=X[n];\
+;		else if(negsum>0)\{overflow=true;\}\
+;		\}\
+;	else\{\
+;		if(X[n]%2!=0)\{oddcount++;\}\
+;	pzcount++;\
+;	\}\
+;\}\
+\
+;intiation block\
+	LOAD 	R6,n[R0]		;loading the size of the given array\
+	LOAD 	R2,negsum[R0]		;loading negsum\
+	LOAD 	R3,pzcount[R0]		;loading pzcount\
+	LOAD 	R4,oddcount[R0]		;loading oddcount\
+	LOAD		R7,boolean[R0]		;loading overflow boolean\
+	LEA  		R1,1[R0]		;constant -1 for the purpose of the loop\
+\
+loop	ADD		R6,R6,R1		;decrementing the index of the given array by one\
+	CMPEQ	R8,R1,R6		;comparing equality with -1 (loop cycles)	 \
+	JUMPT 	R8,done[R0]		;jumping out of the loop\
+	LOAD 	R9,X[R6]		;retrieving the int from the loop with an index n-1\
+	CMPGT	R8,R9,R1		;boolean operation to check if the given int greater than -1\
+	JUMPF	R8,negadd[R0]	;if false, jumps to the neg addition block\
+\
+pcount ADD	R3,R3,R1		;increments pzcount by one;\
+	AND	R8,R9,R1		;checks if the number is odd\
+	JUMPF	R8,return[R0]		;if not then jumps to return block\
+	ADD	R4,R4,R1		;else increments number of odd by one\
+	JUMP    return[R0]		;jumps to the return block\
+\
+negaddADD	R2,R2,R9		;adding operation\
+	CMPGT	R7,R2,R1		;checks for overflow and sets the boolean to 1(true)\
+	\
+return	\
+	JUMP 	loop[R0]		;jumps back to the loop \
+\
+done	STORE 	R2,negsum[R0]\
+	STORE 	R3,pzcount[R0]\
+	STORE 	R4,oddcount[R0]		;storing final results of calculations\
+	TRAP 	R0,R0,R0; 		;terminate the loop\
+\
+;Data block \
+n	data	12 	;size of the array\
+X 	data	3  	; X[0]\
+	data	-6 	; X[1]\
+	data	27 	; X[2]\
+	data	101	; X[3]\
+	data	50 	; X[4]	\
+	data	0  	; X[5]\
+	data	-20	; X[6]\
+	data	-21	; X[7]	\
+	data	19 	; X[8]\
+	data	6 	; X[9]\
+	data	4	; X[10]\
+	data	-10	; X[11]\
+\
+negsum		data	0	; sum of the negative integers from the given array\
+pzcount		data	0	; count of the positive numbers in the array\
+oddcount	data	0	; count of the odd positive numbers\
+boolean		data	0	; boolean to check if overflow happened (set to 1 if true)\
+\
+\
+\
+\
+\
+\
+}
